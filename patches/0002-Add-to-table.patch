@@ -1,0 +1,22 @@
+From 8a805c7b88dceb19bf950cbe71b325d0d76e9582 Mon Sep 17 00:00:00 2001
+From: sabaebrahimi <saba.eb18@gmail.com>
+Date: Thu, 20 Feb 2025 18:11:15 +0000
+Subject: [PATCH 2/3] Add to table
+
+---
+ scripts/syscall.tbl | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/scripts/syscall.tbl b/scripts/syscall.tbl
+index ebbdb3c42..663583102 100644
+--- a/scripts/syscall.tbl
++++ b/scripts/syscall.tbl
+@@ -407,3 +407,4 @@
+ 464	common	getxattrat			sys_getxattrat
+ 465	common	listxattrat			sys_listxattrat
+ 466	common	removexattrat			sys_removexattrat
++467 common  pidchecker          sys_pidchecker
+\ No newline at end of file
+-- 
+2.34.1
+

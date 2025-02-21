@@ -1,0 +1,79 @@
+From a89814e15639ce0cc6b5d6eb35855630458ed124 Mon Sep 17 00:00:00 2001
+From: sabaebrahimi <saba.eb18@gmail.com>
+Date: Thu, 20 Feb 2025 18:00:41 +0000
+Subject: [PATCH 1/3] Add syscall
+
+---
+ include/linux/syscalls.h |  1 +
+ kernel/Makefile          |  2 +-
+ kernel/pidsys.c          | 26 ++++++++++++++++++++++++++
+ 3 files changed, 28 insertions(+), 1 deletion(-)
+ mode change 100644 => 100755 include/linux/syscalls.h
+ mode change 100644 => 100755 kernel/Makefile
+ create mode 100644 kernel/pidsys.c
+
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+old mode 100644
+new mode 100755
+index c6333204d..6b4c284ef
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -368,6 +368,7 @@ asmlinkage long sys_removexattr(const char __user *path,
+ asmlinkage long sys_removexattrat(int dfd, const char __user *path,
+ 				  unsigned int at_flags,
+ 				  const char __user *name);
++asmlinkage long sys_pidchecker(char __user *filename, pid_t pid_number);
+ asmlinkage long sys_lremovexattr(const char __user *path,
+ 				 const char __user *name);
+ asmlinkage long sys_fremovexattr(int fd, const char __user *name);
+diff --git a/kernel/Makefile b/kernel/Makefile
+old mode 100644
+new mode 100755
+index 87866b037..4234c0d05
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -10,7 +10,7 @@ obj-y     = fork.o exec_domain.o panic.o \
+ 	    extable.o params.o \
+ 	    kthread.o sys_ni.o nsproxy.o \
+ 	    notifier.o ksysfs.o cred.o reboot.o \
+-	    async.o range.o smpboot.o ucount.o regset.o ksyms_common.o
++	    async.o range.o smpboot.o ucount.o regset.o ksyms_common.o pidsys.o \
+ 
+ obj-$(CONFIG_USERMODE_DRIVER) += usermode_driver.o
+ obj-$(CONFIG_MULTIUSER) += groups.o
+diff --git a/kernel/pidsys.c b/kernel/pidsys.c
+new file mode 100644
+index 000000000..cfcc0ccd1
+--- /dev/null
++++ b/kernel/pidsys.c
+@@ -0,0 +1,26 @@
++#include <linux/kernel.h>
++#include <linux/syscalls.h>
++#include <linux/uaccess.h>
++#include <linux/sched.h>    // Required for pid_t and process-related functions
++#include <linux/pid.h>      // Required for pid-related operations
++
++
++SYSCALL_DEFINE2(pidchecker, char __user *, filename, pid_t, pid_number)
++{
++    char kernel_buf[256];  // Buffer to store copied string
++    int copied;
++
++    if (!filename)  // Check for NULL pointer
++        return -EINVAL;
++
++    // Copy string from user space to kernel space
++    copied = strncpy_from_user(kernel_buf, filename, sizeof(kernel_buf) - 1);
++    if (copied < 0)
++        return -EFAULT;  // Error in copying
++
++    kernel_buf[255] = '\0';  // Ensure null termination
++
++    printk(KERN_INFO "my_syscall: Received string: %s and number: %d\n", kernel_buf, pid_number);
++
++    return pid_number * 2;    // Example: return double the input value
++}
+\ No newline at end of file
+-- 
+2.34.1
+
