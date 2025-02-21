@@ -22,14 +22,12 @@ This repository contains:
 5. If the PID is not found, it is appended to the file, and the syscall returns `0`.  
 
 ## Directory Structure  
+```
 .
- * [linux-6.13.3](./linux-6.13.3)
- * [patches](./patches)
-   * [pid.patch](./patches/pid.patch)
-   * [0001-Add-syscall.patch](./patches/0001-Add-syscall.patch)
-   * [0002-Add-to-table.patch](./patches/0002-Add-to-table.patch)
-   * [0003-Add-pid-file.patch](./patches/0003-Add-pid-file.patch)
- * [syscall_tester.c](./syscall_tester.c)
+├── linux-6.13.3
+├── patches
+└── syscall_tester.c
+```
 
 ## Installation  
 
